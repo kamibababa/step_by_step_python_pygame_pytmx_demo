@@ -1,6 +1,9 @@
 import pygame
 
 # 限制物体在屏幕内
+import pytmx
+
+
 def limit_position_to_screen(x, y, width, height):
     """限制物体在屏幕内"""
     x = max(0, min(x, SCREEN_WIDTH - width))  # 限制x坐标
@@ -20,10 +23,23 @@ player_y = 50
 player_speed = 0.3  # 玩家速度
 
 
+# 加载 .tmx 地图文件
+tmx_data = pytmx.load_pygame("demo2.tmx")  # 将 'your_map.tmx' 替换为你的文件路径
+
+# 创建一个地图渲染函数
+def draw_map():
+    for layer in tmx_data.visible_layers:
+        if isinstance(layer, pytmx.TiledTileLayer):
+            for x, y, gid in layer:
+                tile = tmx_data.get_tile_image_by_gid(gid)
+
+                if tile:
+                    screen.blit(tile, (x * tmx_data.tilewidth, y * tmx_data.tileheight))
+
 # 游戏主循环
 running = True
 while running:
-    screen.fill((0, 0, 0))  # 填充背景色
+    draw_map()  # 绘制地图
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
