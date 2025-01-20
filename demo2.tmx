@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+<map version="1.4" tiledversion="1.4.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="4">
  <tileset firstgid="1" source="desert_new.tsx"/>
  <tileset firstgid="49" source="meta.tsx"/>
  <layer id="1" name="world" width="20" height="20">
@@ -50,4 +50,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="3" name="player">
+  <object id="1" name="player" x="127.348" y="95.1176" width="31.4438" height="32.2299"/>
+ </objectgroup>
 </map>

@@ -20,13 +20,23 @@ SCREEN_HEIGHT = 640
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Pytmx Demo")
 
-player_x = 50
-player_y = 50
-player_speed = 3  # 玩家速度
-
 
 # 加载 .tmx 地图文件
 tmx_data = pytmx.load_pygame("demo2.tmx")  # 将 'your_map.tmx' 替换为你的文件路径
+
+# player.x = 50
+# player.y = 50
+player_speed = 3  # 玩家速度
+# 设置玩家的初始位置
+player = None
+# 找到玩家对象（在 Object Layer 中）
+for obj in tmx_data.objects:
+    if obj.name == "player":
+        player = obj
+        break
+
+if player is None:
+    raise ValueError("Player object not found in the Object Layer")
 
 # 检查某个位置是否有墙体
 def check_collision(x, y):
@@ -51,6 +61,9 @@ def check_collision(x, y):
 def draw_map():
     for layer in tmx_data.visible_layers:
         if isinstance(layer, pytmx.TiledTileLayer):
+            if layer.name == 'wall':
+                continue
+
             for x, y, gid in layer:
                 tile = tmx_data.get_tile_image_by_gid(gid)
 
@@ -69,31 +82,31 @@ while running:
 
     # 处理键盘输入来移动玩家
     keys = pygame.key.get_pressed()
-    new_x, new_y = player_x, player_y
+    new_x, new_y = player.x, player.y
 
     if keys[pygame.K_LEFT]:
         new_x -= player_speed  # 向左移动
         if not check_collision(new_x, new_y):
-            player_x = new_x
+            player.x = new_x
 
     if keys[pygame.K_RIGHT]:
         new_x += player_speed  # 向右移动
         if not check_collision(new_x, new_y):
-            player_x = new_x
+            player.x = new_x
 
     if keys[pygame.K_UP]:
         new_y -= player_speed  # 向上移动
         if not check_collision(new_x, new_y):
-            player_y = new_y
+            player.y = new_y
 
     if keys[pygame.K_DOWN]:
         new_y += player_speed  # 向下移动
         if not check_collision(new_x, new_y):
-            player_y = new_y
+            player.y = new_y
 
     # 限制玩家位置在屏幕内
-    player_x, player_y = limit_position_to_screen(player_x, player_y, 32, 32)
-    pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(player_x, player_y, 32, 32))  # 32x32 是玩家的大小
+    player.x, player.y = limit_position_to_screen(player.x, player.y, 32, 32)
+    pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(player.x, player.y, 32, 32))  # 32x32 是玩家的大小
     pygame.display.flip()  # 更新显示
     # 控制帧率
     clock.tick(30)
